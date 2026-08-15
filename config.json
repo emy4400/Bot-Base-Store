@@ -1,0 +1,256 @@
+{
+  "token": "",
+  "prefix": "!",
+  "brand": {
+    "name": "Discord Store Bot",
+    "color": "#F54927",
+    "footer": "Discord Store Bot",
+    "logoUrl": "",
+    "ticketImage": ""
+  },
+  "tickets": {
+    "categoryId": "",
+    "logChannelId": "",
+    "staffRoleId": "",
+    "openRoleId": "",
+    "categories": {
+      "compra": {
+        "label": "Compra",
+        "emoji": "🛒",
+        "description": "Ayuda con compras, pagos o entregas.",
+        "channelPrefix": "compra"
+      },
+      "garantia": {
+        "label": "Garantia",
+        "emoji": "🛡️",
+        "description": "Reclamos, cambios o garantia de productos/servicios.",
+        "channelPrefix": "garantia"
+      },
+      "soporte": {
+        "label": "Soporte",
+        "emoji": "🧰",
+        "description": "Problemas tecnicos o dudas generales.",
+        "channelPrefix": "soporte"
+      },
+      "reporte": {
+        "label": "Reporte",
+        "emoji": "🚫",
+        "description": "Reporta usuarios, bugs o comportamientos.",
+        "channelPrefix": "reporte"
+      }
+    }
+  },
+  "suggestions": {
+    "channelId": "",
+    "reviewChannelId": "",
+    "staffRoleId": ""
+  },
+  "autoroles": {
+    "roles": []
+  },
+  "reviews": {
+    "channelId": "",
+    "logChannelId": "",
+    "staffRoleId": "",
+    "serviceOptions": [
+      "Producto",
+      "Servicio",
+      "Soporte",
+      "Garantia"
+    ]
+  },
+  "giveaways": {
+    "logChannelId": "",
+    "staffRoleId": ""
+  },
+  "customEmbeds": {
+    "staffRoleId": ""
+  },
+  "moderation": {
+    "staffRoleIds": [],
+    "logChannelId": "",
+    "clearAmounts": [
+      10,
+      50,
+      100
+    ]
+  },
+  "anticrash": {
+    "logChannelId": "",
+    "includeStack": true
+  },
+  "memberStats": {
+    "categoryId": "",
+    "clientRoleId": "",
+    "refreshMinutes": 10,
+    "channels": {
+      "members": "👥 Miembros",
+      "active": "🟢 Activos",
+      "clients": "💎 Clientes",
+      "bots": "🤖 Bots"
+    }
+  },
+  "socials": {
+    "title": "Redes oficiales",
+    "description": "Encuentra nuestras redes oficiales y canales de contacto.",
+    "links": [
+      {
+        "label": "TikTok",
+        "url": ""
+      },
+      {
+        "label": "Instagram",
+        "url": ""
+      },
+      {
+        "label": "YouTube",
+        "url": ""
+      },
+      {
+        "label": "Discord",
+        "url": ""
+      }
+    ]
+  },
+  "serverInvite": {
+    "url": "",
+    "channelId": "",
+    "title": "Invitacion oficial",
+    "description": "Unete a nuestro servidor para recibir soporte, novedades, sorteos y anuncios."
+  },
+  "serverSetup": {
+    "staffRoleIds": [],
+    "staffRoleNames": [
+      "Staff",
+      "Soporte"
+    ],
+    "roles": [
+      {
+        "name": "Staff",
+        "color": "#F54927",
+        "hoist": true,
+        "mentionable": false
+      },
+      {
+        "name": "Soporte",
+        "color": "#F54927",
+        "hoist": true,
+        "mentionable": false
+      },
+      {
+        "name": "Cliente",
+        "color": "#2ECC71",
+        "hoist": false,
+        "mentionable": false
+      },
+      {
+        "name": "Notificaciones",
+        "color": "#3498DB",
+        "hoist": false,
+        "mentionable": true
+      },
+      {
+        "name": "Sorteos",
+        "color": "#F1C40F",
+        "hoist": false,
+        "mentionable": true
+      }
+    ],
+    "categories": [
+      {
+        "name": "📌 INFORMACION",
+        "channels": [
+          {
+            "name": "bienvenida",
+            "type": "text",
+            "topic": "Bienvenida e informacion principal del servidor."
+          },
+          {
+            "name": "anuncios",
+            "type": "text",
+            "topic": "Anuncios importantes del servidor."
+          },
+          {
+            "name": "redes",
+            "type": "text",
+            "topic": "Redes sociales oficiales."
+          }
+        ]
+      },
+      {
+        "name": "🛒 CLIENTES",
+        "channels": [
+          {
+            "name": "comprar",
+            "type": "text",
+            "topic": "Canal para abrir ticket de compra."
+          },
+          {
+            "name": "soporte",
+            "type": "text",
+            "topic": "Canal para soporte y dudas."
+          },
+          {
+            "name": "garantia",
+            "type": "text",
+            "topic": "Canal para garantia."
+          },
+          {
+            "name": "reseñas",
+            "type": "text",
+            "topic": "Reseñas y experiencias de clientes."
+          }
+        ]
+      },
+      {
+        "name": "🎉 COMUNIDAD",
+        "channels": [
+          {
+            "name": "chat-general",
+            "type": "text",
+            "topic": "Chat principal de la comunidad."
+          },
+          {
+            "name": "sugerencias",
+            "type": "text",
+            "topic": "Sugerencias para mejorar el servidor."
+          },
+          {
+            "name": "sorteos",
+            "type": "text",
+            "topic": "Sorteos oficiales."
+          }
+        ]
+      },
+      {
+        "name": "🔒 STAFF",
+        "channels": [
+          {
+            "name": "staff-chat",
+            "type": "text",
+            "topic": "Comunicacion interna del staff.",
+            "private": true
+          },
+          {
+            "name": "logs",
+            "type": "text",
+            "topic": "Logs importantes del bot.",
+            "private": true
+          }
+        ]
+      }
+    ]
+  },
+  "welcome": {
+    "welcomeEnabled": true,
+    "farewellEnabled": true,
+    "welcomeChannelId": "",
+    "farewellChannelId": "",
+    "welcomePing": "{user}",
+    "welcomeTitle": "Bienvenido al servidor",
+    "welcomeMessage": "Hola {user}, bienvenido a **{server}**. Revisa la informacion del servidor y abre un ticket si necesitas ayuda.",
+    "farewellTitle": "Gracias por visitarnos",
+    "farewellMessage": "**{tag}** salio de **{server}**. Esperamos verlo pronto de nuevo.",
+    "imageUrl": ""
+  }
+}

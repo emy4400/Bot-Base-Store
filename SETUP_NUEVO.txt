@@ -1,0 +1,325 @@
+
+IMPORTANTE
+- No subas tu token de Discord a GitHub.
+- El token se coloca en config.json -> token, o como variable DISCORD_TOKEN.
+- El bot necesita permisos de Administrador o, como minimo:
+  Gestionar canales, Gestionar roles, Gestionar mensajes, Banear miembros,
+  Expulsar miembros, Moderar miembros, Crear invitaciones, Ver canales,
+  Enviar mensajes, Leer historial y Usar comandos/componentes.
+- El rol del bot debe estar arriba de los roles que va a dar, crear o administrar.
+
+1. INSTALACION
+
+1. Extrae el ZIP.
+2. Abre la carpeta en VS Code.
+3. Ejecuta:
+
+npm install
+npm start
+
+2. CONFIGURACION PRINCIPAL
+
+Abre config.json.
+
+Campos importantes:
+
+"token": ""
+Aqui va el token del bot. Usa un token nuevo del Discord Developer Portal.
+
+"prefix": "!"
+Prefijo de comandos. Si lo cambias a ".", los comandos seran .ayuda, .bot-status, etc.
+
+"brand": {
+  "name": "Discord Store Bot",
+  "color": "#F54927",
+  "footer": "Discord Store Bot",
+  "logoUrl": "",
+  "ticketImage": ""
+}
+
+- name: nombre que aparece en embeds.
+- color: color principal de embeds.
+- footer: texto inferior.
+- logoUrl: URL del logo.
+- ticketImage: imagen opcional para el panel de tickets.
+
+3. TICKETS
+
+Comando:
+!ticket-panel
+
+Configuracion:
+
+"tickets": {
+  "categoryId": "",
+  "logChannelId": "",
+  "staffRoleId": "",
+  "openRoleId": ""
+}
+
+- categoryId: ID de la categoria donde se crean tickets.
+- logChannelId: canal donde se mandan logs/transcripts.
+- staffRoleId: rol que puede ver/tomar/cerrar tickets.
+- openRoleId: rol que se agrega al usuario cuando abre ticket. Es opcional.
+
+Categorias incluidas:
+- Compra
+- Garantia
+- Soporte
+- Reporte
+
+4. SUGERENCIAS
+
+Comando:
+!sugerencias-panel
+
+Configuracion:
+
+"suggestions": {
+  "channelId": "",
+  "reviewChannelId": "",
+  "staffRoleId": ""
+}
+
+- channelId: canal donde se publican sugerencias.
+- staffRoleId: rol que puede aprobar/rechazar sugerencias.
+
+5. AUTOROLES
+
+Comando:
+!autoroles-panel
+
+Configuracion:
+
+"autoroles": {
+  "roles": [
+    {
+      "label": "Notificaciones",
+      "roleId": "ID_DEL_ROL",
+      "emoji": "🔔",
+      "description": "Recibe anuncios importantes."
+    }
+  ]
+}
+
+6. RESEÑAS
+
+Comando:
+!reseñas-panel
+
+Configuracion:
+
+"reviews": {
+  "channelId": "",
+  "logChannelId": "",
+  "staffRoleId": "",
+  "serviceOptions": ["Producto", "Servicio", "Soporte", "Garantia"]
+}
+
+7. SORTEOS
+
+Comando:
+!sorteo
+
+El bot abre una ventana/modal para pedir:
+- premio
+- duracion
+- numero de ganadores
+- canal destino
+- tag opcional
+
+Finalizar manualmente:
+!giveaway-end ID_DEL_MENSAJE
+
+Configuracion:
+
+"giveaways": {
+  "logChannelId": "",
+  "staffRoleId": ""
+}
+
+8. EMBEDS PERSONALIZADOS
+
+Comando:
+!embed-crear
+
+Abre una ventana/modal para crear un embed con:
+- titulo
+- contenido
+- tag
+- canal destino
+- footer
+
+Configuracion:
+
+"customEmbeds": {
+  "staffRoleId": ""
+}
+
+Si customEmbeds.staffRoleId esta vacio, usa el primer rol de moderation.staffRoleIds
+o permite administradores del servidor.
+
+9. MODERACION
+
+Comandos:
+!clear 10
+!clear 50
+!clear 100
+!ban @usuario razon
+!kick @usuario razon
+!timeout @usuario 10m razon
+
+Configuracion:
+
+"moderation": {
+  "staffRoleIds": [],
+  "logChannelId": "",
+  "clearAmounts": [10, 50, 100]
+}
+
+10. ANTICRASH
+
+Configuracion:
+
+"anticrash": {
+  "logChannelId": "",
+  "includeStack": true
+}
+
+Si pones logChannelId, el bot mandara errores importantes a ese canal.
+
+11. CONTADORES DE MIEMBROS
+
+Comandos:
+!stats-setup
+!stats-refresh
+
+Crea una categoria de voz con:
+- miembros totales
+- activos
+- clientes
+- bots
+
+Configuracion:
+
+"memberStats": {
+  "categoryId": "",
+  "clientRoleId": "",
+  "refreshMinutes": 10
+}
+
+- categoryId: se puede dejar vacio; !stats-setup crea la categoria.
+- clientRoleId: rol que cuenta como cliente.
+- refreshMinutes: cada cuantos minutos se actualiza.
+
+12. REDES SOCIALES
+
+Comando:
+!redes
+
+Configuracion:
+
+"socials": {
+  "title": "Redes oficiales",
+  "description": "Encuentra nuestras redes oficiales y canales de contacto.",
+  "links": [
+    { "label": "TikTok", "url": "" },
+    { "label": "Instagram", "url": "" },
+    { "label": "YouTube", "url": "" },
+    { "label": "Discord", "url": "" }
+  ]
+}
+
+Los links vacios no se muestran.
+
+13. INVITACION DEL SERVIDOR
+
+Comando:
+!invitacion
+
+Configuracion:
+
+"serverInvite": {
+  "url": "",
+  "channelId": "",
+  "title": "Invitacion oficial",
+  "description": "Unete a nuestro servidor para recibir soporte, novedades, sorteos y anuncios."
+}
+
+Si url esta vacio, el bot intentara crear una invitacion automaticamente.
+
+14. SETUP AUTOMATICO DEL SERVIDOR
+
+Comando:
+!setup-servidor
+
+Crea/verifica roles, categorias y canales base.
+
+Configuracion de permisos:
+
+"serverSetup": {
+  "staffRoleIds": [],
+  "staffRoleNames": ["Staff", "Soporte"]
+}
+
+- staffRoleIds: roles que pueden ejecutar !setup-servidor.
+- staffRoleNames: roles que tendran acceso a canales privados del setup.
+
+Puedes editar serverSetup.roles y serverSetup.categories para cambiar la estructura.
+
+15. BIENVENIDAS Y DESPEDIDAS
+
+Configuracion:
+
+"welcome": {
+  "welcomeEnabled": true,
+  "farewellEnabled": true,
+  "welcomeChannelId": "",
+  "farewellChannelId": "",
+  "welcomePing": "{user}",
+  "welcomeTitle": "Bienvenido al servidor",
+  "welcomeMessage": "Hola {user}, bienvenido a **{server}**.",
+  "farewellTitle": "Gracias por visitarnos",
+  "farewellMessage": "**{tag}** salio de **{server}**.",
+  "imageUrl": ""
+}
+
+Variables disponibles:
+- {user}: mencion del usuario.
+- {tag}: nombre#tag del usuario.
+- {server}: nombre del servidor.
+- {memberCount}: total de miembros.
+
+16. ESTADO DEL BOT
+
+Comando:
+!bot-status
+
+Muestra:
+- ping
+- uptime
+- memoria
+- estado de configuracion
+- tickets, sorteos, reseñas, redes, setup, anticrash y contadores
+
+17. RELOAD
+
+Comando:
+!reload
+
+Recarga el handler principal y confirma en Discord.
+
+18. ORDEN RECOMENDADO
+
+1. Pon token, nombre, color y logo en config.json.
+2. Ejecuta npm install.
+3. Ejecuta npm start.
+4. Usa !bot-status.
+5. Configura IDs de canales/roles.
+6. Usa !setup-servidor si quieres crear estructura base.
+7. Publica paneles:
+   !ticket-panel
+   !sugerencias-panel
+   !autoroles-panel
+   !reseñas-panel
+8. Prueba !embed-crear, !sorteo, !redes e !invitacion.
