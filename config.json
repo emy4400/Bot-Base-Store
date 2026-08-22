@@ -2,17 +2,22 @@
   "token": "",
   "prefix": "!",
   "brand": {
-    "name": "Discord Store Bot",
-    "color": "#F54927",
-    "footer": "Discord Store Bot",
+    "name": "NOMBRE_DEL_SERVIDOR",
+    "botName": "NOMBRE_DEL_BOT",
+    "color": "#000000",
+    "secondaryColor": "#ffffff",
+    "footer": "NOMBRE_DEL_BOT",
     "logoUrl": "",
+    "bannerUrl": "",
     "ticketImage": ""
   },
   "tickets": {
     "categoryId": "",
     "logChannelId": "",
     "staffRoleId": "",
+    "staffRoleIds": [],
     "openRoleId": "",
+    "completedRoleId": "",
     "categories": {
       "compra": {
         "label": "Compra",
@@ -52,34 +57,28 @@
     "channelId": "",
     "logChannelId": "",
     "staffRoleId": "",
-    "serviceOptions": [
-      "Producto",
-      "Servicio",
-      "Soporte",
-      "Garantia"
-    ]
+    "serviceOptions": ["Producto", "Servicio", "Soporte", "Garantia"]
   },
   "giveaways": {
     "logChannelId": "",
-    "staffRoleId": ""
+    "staffRoleId": "",
+    "staffRoleIds": []
   },
   "customEmbeds": {
-    "staffRoleId": ""
+    "staffRoleId": "",
+    "staffRoleIds": []
   },
   "moderation": {
     "staffRoleIds": [],
     "logChannelId": "",
-    "clearAmounts": [
-      10,
-      50,
-      100
-    ]
+    "clearAmounts": [10, 50, 100]
   },
   "anticrash": {
     "logChannelId": "",
     "includeStack": true
   },
   "memberStats": {
+    "enabled": false,
     "categoryId": "",
     "clientRoleId": "",
     "refreshMinutes": 10,
@@ -120,26 +119,35 @@
   },
   "serverSetup": {
     "staffRoleIds": [],
-    "staffRoleNames": [
-      "Staff",
-      "Soporte"
-    ],
+    "staffRoleNames": ["Owner", "Co Owner", "Staff"],
     "roles": [
       {
-        "name": "Staff",
-        "color": "#F54927",
+        "name": "Owner",
+        "color": "#000000",
         "hoist": true,
         "mentionable": false
       },
       {
-        "name": "Soporte",
-        "color": "#F54927",
+        "name": "Co Owner",
+        "color": "#ffffff",
         "hoist": true,
+        "mentionable": false
+      },
+      {
+        "name": "Staff",
+        "color": "#ffffff",
+        "hoist": true,
+        "mentionable": false
+      },
+      {
+        "name": "Familia",
+        "color": "#ffffff",
+        "hoist": false,
         "mentionable": false
       },
       {
         "name": "Cliente",
-        "color": "#2ECC71",
+        "color": "#ffffff",
         "hoist": false,
         "mentionable": false
       },

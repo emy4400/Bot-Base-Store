@@ -19,8 +19,15 @@ function getBrand(client) {
 }
 
 function canCreateEmbed(member, client) {
-  const staffRoleId = client.config.customEmbeds?.staffRoleId || client.config.moderation?.staffRoleIds?.[0];
-  const hasStaffRole = staffRoleId && member.roles.cache.has(staffRoleId);
+  const embedConfig = client.config.customEmbeds || {};
+  const roleIds = [
+    ...(Array.isArray(embedConfig.staffRoleIds) ? embedConfig.staffRoleIds : []),
+    embedConfig.staffRoleId,
+    ...(Array.isArray(client.config.moderation?.staffRoleIds)
+      ? client.config.moderation.staffRoleIds
+      : []),
+  ].filter(Boolean);
+  const hasStaffRole = roleIds.some((roleId) => member.roles.cache.has(roleId));
   return hasStaffRole || member.permissions.has(PermissionFlagsBits.ManageGuild);
 }
 
@@ -34,18 +41,17 @@ function buildCustomEmbed(client, data) {
     })
     .setTitle(data.title)
     .setDescription(data.description)
-    .setFooter({
-      text: data.footer || brand.footer || brand.name || "Discord Store Bot",
-    })
     .setTimestamp();
 
+  const footer = data.footer || brand.footer || brand.name || "";
+  if (footer) embed.setFooter({ text: footer });
   if (brand.logoUrl) embed.setThumbnail(brand.logoUrl);
   return embed;
 }
 
-function buildCustomEmbedModal(userId) {
+function buildCustomEmbedModal() {
   return new ModalBuilder()
-    .setCustomId(`custom_embed_modal:${userId}`)
+    .setCustomId("custom_embed_modal")
     .setTitle("Crear embed profesional")
     .addComponents(
       new ActionRowBuilder().addComponents(
@@ -79,18 +85,18 @@ function buildCustomEmbedModal(userId) {
         new TextInputBuilder()
           .setCustomId("channel")
           .setLabel("Canal destino")
-          .setPlaceholder("Menciona el canal, pega su ID o escribe su nombre")
+          .setPlaceholder("Opcional. Vacio = canal donde esta el panel")
           .setStyle(TextInputStyle.Short)
-          .setRequired(true)
+          .setRequired(false)
           .setMaxLength(100),
       ),
       new ActionRowBuilder().addComponents(
         new TextInputBuilder()
           .setCustomId("footer")
           .setLabel("Pie de mensaje")
-          .setPlaceholder("default para usar el footer configurado")
+          .setPlaceholder("Opcional. Vacio = footer configurado")
           .setStyle(TextInputStyle.Short)
-          .setRequired(true)
+          .setRequired(false)
           .setMaxLength(256),
       ),
     );
@@ -124,7 +130,7 @@ async function createCustomEmbedWizard(message) {
     components: [
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
-          .setCustomId(`custom_embed_open:${message.author.id}`)
+          .setCustomId("custom_embed_open")
           .setLabel("Crear anuncio")
           .setEmoji("📝")
           .setStyle(ButtonStyle.Danger),
@@ -133,14 +139,7 @@ async function createCustomEmbedWizard(message) {
   });
 }
 
-async function sendCustomEmbedFromModal(interaction, ownerId) {
-  if (interaction.user.id !== ownerId) {
-    return interaction.reply({
-      content: "Este formulario pertenece a otro usuario.",
-      ephemeral: true,
-    });
-  }
-
+async function sendCustomEmbedFromModal(interaction) {
   if (!canCreateEmbed(interaction.member, interaction.client)) {
     return interaction.reply({
       content: "Necesitas permiso de administrar servidor para crear embeds.",
@@ -151,10 +150,10 @@ async function sendCustomEmbedFromModal(interaction, ownerId) {
   const title = interaction.fields.getTextInputValue("title").trim();
   const description = interaction.fields.getTextInputValue("description").trim();
   const tag = parseAnnouncementTag(interaction.guild, interaction.fields.getTextInputValue("tag"));
-  const targetChannel = resolveTextChannel(
-    interaction.guild,
-    interaction.fields.getTextInputValue("channel"),
-  );
+  const channelInput = interaction.fields.getTextInputValue("channel").trim();
+  const targetChannel = channelInput
+    ? resolveTextChannel(interaction.guild, channelInput)
+    : interaction.channel;
   const footerInput = interaction.fields.getTextInputValue("footer").trim();
 
   if (!tag) {

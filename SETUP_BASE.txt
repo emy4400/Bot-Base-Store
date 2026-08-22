@@ -1,0 +1,122 @@
+DISCORD STORE BOT BASE - GUIA RAPIDA
+
+Esta version esta limpia para iniciar una nueva personalizacion.
+No incluye token, IDs reales, logos privados, datos de tickets, sorteos ni node_modules.
+
+1. INSTALAR
+
+En la carpeta del bot:
+
+npm install
+npm start
+
+Si estas en Railway o VPS, configura el token como variable:
+
+DISCORD_TOKEN=TOKEN_REAL_DEL_BOT
+
+Si lo pruebas solo en tu PC, tambien puedes poner el token temporalmente en:
+
+config.json -> "token": "TOKEN_REAL_DEL_BOT"
+
+No subas tokens a GitHub.
+
+2. MARCA
+
+Edita config.json:
+
+brand.name: nombre del servidor
+brand.botName: nombre del bot
+brand.color: color principal en HEX
+brand.secondaryColor: color secundario en HEX
+brand.footer: texto del pie de embeds
+brand.logoUrl: URL del logo
+brand.bannerUrl: URL del banner
+brand.ticketImage: imagen del panel de tickets
+
+3. ROLES IMPORTANTES
+
+Pon IDs cuando el servidor ya tenga roles creados:
+
+tickets.staffRoleId: rol principal de soporte
+tickets.staffRoleIds: lista de roles que pueden manejar tickets
+tickets.openRoleId: rol que se da al abrir ticket
+tickets.completedRoleId: rol que se da cuando el ticket queda completado
+moderation.staffRoleIds: roles que pueden usar clear, ban, kick y timeout
+giveaways.staffRoleId/staffRoleIds: roles que pueden crear/finalizar sorteos
+customEmbeds.staffRoleId/staffRoleIds: roles que pueden crear anuncios/embeds
+reviews.staffRoleId: rol staff para revisar reseñas
+suggestions.staffRoleId: rol staff para sugerencias
+serverSetup.staffRoleIds: roles autorizados para ejecutar setup-servidor
+
+4. CANALES Y CATEGORIAS
+
+Pon IDs cuando ya existan:
+
+tickets.categoryId: categoria donde se crean tickets
+tickets.logChannelId: logs/transcripts de tickets
+suggestions.channelId: canal de sugerencias
+reviews.channelId: canal de reseñas
+giveaways.logChannelId: logs de sorteos
+moderation.logChannelId: logs de moderacion
+anticrash.logChannelId: errores del bot
+welcome.welcomeChannelId: canal de bienvenidas
+welcome.farewellChannelId: canal de despedidas
+memberStats.categoryId: categoria de contadores si ya existe
+memberStats.clientRoleId: rol Cliente para contador de clientes
+
+5. COMANDOS PRINCIPALES
+
+!ticket-panel
+!sugerencias-panel
+!autoroles-panel
+!reseñas-panel
+!embed-crear
+!sorteo
+!bot-status
+!clear 10|50|100
+!ban @usuario razon
+!kick @usuario razon
+!timeout @usuario 10m razon
+!reload
+!stats-setup
+!stats-refresh
+!redes
+!invitacion
+!setup-servidor
+!ayuda
+
+6. CONTADORES DE MIEMBROS
+
+Por defecto memberStats.enabled esta en false para que el bot no cree categorias
+automaticamente en servidores nuevos.
+
+Para activarlos usa:
+
+!stats-setup
+
+Eso cambia memberStats.enabled a true y crea/reutiliza la categoria de voz.
+
+7. LIMPIEZA PARA GITHUB
+
+Este paquete ya trae .gitignore:
+
+node_modules/
+.env
+config.local.json
+
+No subas node_modules. Instala dependencias con npm install.
+
+8. PERSONALIZACION NUEVA
+
+Para adaptar esta base a otro cliente pide:
+
+Nombre del servidor
+Nombre del bot
+Color principal
+Color secundario
+URL del logo
+URL del banner
+Link de invitacion
+IDs de roles staff/cliente/familia
+IDs de canales de logs, tickets, reseñas, sorteos, bienvenida y despedida
+Textos de reglas, FAQ, servicios y metodos de pago si aplica

@@ -33,7 +33,14 @@ function formatWinners(winnerIds) {
 
 function canManageGiveaways(member, client) {
   const config = getGiveawayConfig(client);
-  const hasStaffRole = config.staffRoleId && member.roles.cache.has(config.staffRoleId);
+  const roleIds = [
+    ...(Array.isArray(config.staffRoleIds) ? config.staffRoleIds : []),
+    config.staffRoleId,
+    ...(Array.isArray(client.config.moderation?.staffRoleIds)
+      ? client.config.moderation.staffRoleIds
+      : []),
+  ].filter(Boolean);
+  const hasStaffRole = roleIds.some((roleId) => member.roles.cache.has(roleId));
   return hasStaffRole || member.permissions.has(PermissionFlagsBits.ManageGuild);
 }
 
@@ -74,6 +81,12 @@ function buildGiveawayButtons(giveawayId, ended = false) {
         .setLabel(ended ? "Sorteo cerrado" : "Participar")
         .setEmoji("🎉")
         .setStyle(ended ? ButtonStyle.Secondary : ButtonStyle.Success)
+        .setDisabled(Boolean(ended)),
+      new ButtonBuilder()
+        .setCustomId(`giveaway_end:${giveawayId}`)
+        .setLabel(ended ? "Finalizado" : "Terminar")
+        .setEmoji("🔒")
+        .setStyle(ButtonStyle.Danger)
         .setDisabled(Boolean(ended))
     ),
   ];
@@ -119,7 +132,7 @@ async function createGiveawayWizard(message) {
     components: [
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
-          .setCustomId(`giveaway_open:${message.author.id}`)
+          .setCustomId("giveaway_open")
           .setLabel("Crear sorteo")
           .setEmoji("🎉")
           .setStyle(ButtonStyle.Danger),
@@ -128,9 +141,9 @@ async function createGiveawayWizard(message) {
   });
 }
 
-function buildGiveawayModal(userId) {
+function buildGiveawayModal() {
   return new ModalBuilder()
-    .setCustomId(`giveaway_modal:${userId}`)
+    .setCustomId("giveaway_modal")
     .setTitle("Crear sorteo")
     .addComponents(
       new ActionRowBuilder().addComponents(
@@ -164,9 +177,9 @@ function buildGiveawayModal(userId) {
         new TextInputBuilder()
           .setCustomId("channel")
           .setLabel("Canal destino")
-          .setPlaceholder("Menciona el canal, pega su ID o escribe su nombre")
+          .setPlaceholder("Opcional. Vacio = canal donde esta el panel")
           .setStyle(TextInputStyle.Short)
-          .setRequired(true)
+          .setRequired(false)
           .setMaxLength(100),
       ),
       new ActionRowBuilder().addComponents(
@@ -181,14 +194,7 @@ function buildGiveawayModal(userId) {
     );
 }
 
-async function createGiveawayFromModal(interaction, ownerId) {
-  if (interaction.user.id !== ownerId) {
-    return interaction.reply({
-      content: "Este formulario pertenece a otro usuario.",
-      ephemeral: true,
-    });
-  }
-
+async function createGiveawayFromModal(interaction) {
   if (!canManageGiveaways(interaction.member, interaction.client)) {
     return interaction.reply({
       content: "Necesitas permiso de administrar servidor para crear sorteos.",
@@ -199,10 +205,10 @@ async function createGiveawayFromModal(interaction, ownerId) {
   const prize = interaction.fields.getTextInputValue("prize").trim();
   const duration = parseDuration(interaction.fields.getTextInputValue("duration"));
   const winnerCount = Number(interaction.fields.getTextInputValue("winners"));
-  const targetChannel = resolveTextChannel(
-    interaction.guild,
-    interaction.fields.getTextInputValue("channel"),
-  );
+  const channelInput = interaction.fields.getTextInputValue("channel").trim();
+  const targetChannel = channelInput
+    ? resolveTextChannel(interaction.guild, channelInput)
+    : interaction.channel;
   const tag = parseAnnouncementTag(interaction.guild, interaction.fields.getTextInputValue("tag"));
 
   if (!duration) {
@@ -337,19 +343,21 @@ async function endGiveaway(client, giveawayId, forcedBy = null) {
   return true;
 }
 
-async function endGiveawayCommand(message, args) {
-  if (!canManageGiveaways(message.member, message.client)) {
-    return message.reply("Necesitas permiso de administrar servidor para finalizar sorteos.");
+async function endGiveawayButton(interaction, giveawayId) {
+  if (!canManageGiveaways(interaction.member, interaction.client)) {
+    return interaction.reply({
+      content: "Faltan permisos. Solo el staff autorizado puede terminar sorteos.",
+      ephemeral: true,
+    });
   }
 
-  const messageId = args[0];
-  const store = readStore("giveaways", { giveaways: {} });
-  const giveaway = Object.values(store.giveaways).find((item) => item.messageId === messageId || item.id === messageId);
-
-  if (!giveaway) return message.reply("No encontré un sorteo con ese ID o mensaje.");
-
-  const ended = await endGiveaway(message.client, giveaway.id, message.author.id);
-  return message.reply(ended ? "Sorteo finalizado correctamente." : "Ese sorteo ya estaba finalizado.");
+  const ended = await endGiveaway(interaction.client, giveawayId, interaction.user.id);
+  return interaction.reply({
+    content: ended
+      ? "✅ Sorteo finalizado correctamente."
+      : "Este sorteo ya estaba finalizado o no existe.",
+    ephemeral: true,
+  });
 }
 
 function scheduleGiveaway(client, giveawayId) {
@@ -384,7 +392,7 @@ module.exports = {
   buildGiveawayModal,
   createGiveawayFromModal,
   createGiveawayWizard,
-  endGiveawayCommand,
+  endGiveawayButton,
   joinGiveaway,
   restoreGiveawayTimers,
 };

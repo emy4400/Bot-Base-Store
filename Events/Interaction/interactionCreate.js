@@ -13,6 +13,7 @@ const {
 const {
   buildGiveawayModal,
   createGiveawayFromModal,
+  endGiveawayButton,
   joinGiveaway,
 } = require("../../Utils/giveaways");
 const {
@@ -27,6 +28,8 @@ const {
 const {
   claimTicket,
   closeTicket,
+  completeTicket,
+  completeTicketWithSchedule,
   createTicket,
 } = require("../../Utils/tickets");
 
@@ -105,6 +108,15 @@ function buildReviewModal() {
           .setStyle(TextInputStyle.Paragraph)
           .setRequired(true)
           .setMaxLength(1200)
+      ),
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder()
+          .setCustomId("imageUrl")
+          .setLabel("Foto opcional")
+          .setPlaceholder("Pega URL de imagen o deja vacio")
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false)
+          .setMaxLength(500)
       )
     );
 }
@@ -122,6 +134,10 @@ module.exports = {
 
       if (interaction.customId === "ticket_close") return closeTicket(interaction);
       if (interaction.customId === "ticket_claim") return claimTicket(interaction);
+      if (interaction.customId === "ticket_complete") return completeTicket(interaction);
+      if (action === "ticket_complete_schedule") {
+        return completeTicketWithSchedule(interaction, value, extra);
+      }
       if (interaction.customId === "suggestion_open") {
         return interaction.showModal(buildSuggestionModal());
       }
@@ -130,23 +146,11 @@ module.exports = {
       }
 
       if (action === "custom_embed_open") {
-        if (interaction.user.id !== value) {
-          return interaction.reply({
-            content: "Este creador de embed pertenece a otro usuario.",
-            ephemeral: true,
-          });
-        }
-        return interaction.showModal(buildCustomEmbedModal(value));
+        return interaction.showModal(buildCustomEmbedModal());
       }
 
       if (action === "giveaway_open") {
-        if (interaction.user.id !== value) {
-          return interaction.reply({
-            content: "Este creador de sorteo pertenece a otro usuario.",
-            ephemeral: true,
-          });
-        }
-        return interaction.showModal(buildGiveawayModal(value));
+        return interaction.showModal(buildGiveawayModal());
       }
 
       if (action === "suggestion_vote") return voteSuggestion(interaction, value, extra);
@@ -158,6 +162,7 @@ module.exports = {
       }
       if (action === "review_helpful") return markReviewHelpful(interaction, value);
       if (action === "giveaway_join") return joinGiveaway(interaction, value);
+      if (action === "giveaway_end") return endGiveawayButton(interaction, value);
     }
 
     if (interaction.isStringSelectMenu() && interaction.customId === "autorole_toggle") {
@@ -187,15 +192,16 @@ module.exports = {
           service: interaction.fields.getTextInputValue("service"),
           rating: interaction.fields.getTextInputValue("rating"),
           comment: interaction.fields.getTextInputValue("comment"),
+          imageUrl: interaction.fields.getTextInputValue("imageUrl"),
         });
       }
 
       if (modal === "custom_embed_modal") {
-        return sendCustomEmbedFromModal(interaction, categoryKey);
+        return sendCustomEmbedFromModal(interaction);
       }
 
       if (modal === "giveaway_modal") {
-        return createGiveawayFromModal(interaction, categoryKey);
+        return createGiveawayFromModal(interaction);
       }
     }
   },

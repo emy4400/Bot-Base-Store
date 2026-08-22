@@ -20,6 +20,17 @@ function getStars(rating) {
   return "⭐".repeat(value) + "☆".repeat(5 - value);
 }
 
+function isValidImageUrl(value) {
+  if (!value) return true;
+
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
+
 function buildReviewsPanel(client) {
   const brand = getBrand(client);
   const embed = new EmbedBuilder()
@@ -64,6 +75,7 @@ function buildReviewEmbed(client, review) {
     .setFooter({ text: brand.footer || brand.name || "Reseñas verificadas" });
 
   if (brand.logoUrl) embed.setThumbnail(brand.logoUrl);
+  if (review.imageUrl) embed.setImage(review.imageUrl);
   return embed;
 }
 
@@ -92,9 +104,17 @@ async function createReview(interaction, data) {
   }
 
   const rating = Number(data.rating);
+  const imageUrl = String(data.imageUrl || "").trim();
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
     return interaction.reply({
       content: "La puntuación debe ser un número del 1 al 5.",
+      ephemeral: true,
+    });
+  }
+
+  if (!isValidImageUrl(imageUrl)) {
+    return interaction.reply({
+      content: "La foto debe ser una URL valida que empiece con http:// o https://.",
       ephemeral: true,
     });
   }
@@ -111,6 +131,7 @@ async function createReview(interaction, data) {
     service: data.service,
     rating,
     comment: data.comment,
+    imageUrl,
     helpful: [],
     createdAt: new Date().toISOString(),
   };

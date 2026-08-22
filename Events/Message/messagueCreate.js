@@ -1,10 +1,7 @@
 const { PermissionFlagsBits } = require("discord.js");
 const { buildAutorolesPanel } = require("../../Utils/autoroles");
 const { createCustomEmbedWizard } = require("../../Utils/customEmbeds");
-const {
-  createGiveawayWizard,
-  endGiveawayCommand,
-} = require("../../Utils/giveaways");
+const { createGiveawayWizard } = require("../../Utils/giveaways");
 const { buildReviewsPanel } = require("../../Utils/reviews");
 const {
   banCommand,
@@ -84,10 +81,6 @@ module.exports = {
         return createGiveawayWizard(message);
       }
 
-      if (["giveaway-end", "sorteo-finalizar"].includes(command)) {
-        return endGiveawayCommand(message, args);
-      }
-
       if (["bot-status", "estado-bot", "status-bot"].includes(command)) {
         return sendBotStatus(message);
       }
@@ -131,7 +124,7 @@ module.exports = {
             "`!reseñas-panel` - publica el panel avanzado de reseñas.",
             "`!embed-crear` - crea un embed personalizado con cuestionario.",
             "`!sorteo` - crea un sorteo guiado por cuestionario.",
-            "`!giveaway-end <id_del_mensaje>` - finaliza un sorteo manualmente.",
+            "Los sorteos se finalizan desde el botón `Terminar` del mismo sorteo.",
             "`!bot-status` - muestra estado tecnico y configuracion importante.",
             "`!clear 10|50|100` - limpia mensajes del canal.",
             "`!ban @usuario razon` - banea usuarios.",
@@ -147,10 +140,5 @@ module.exports = {
         );
       }
     }
-
-    if (message.content === "hola") return message.reply("Hola, ¿cómo estás?");
-    if (message.content === "adiós")
-      return message.reply("Adiós, ¡que tengas un buen día!");
-    if (message.content === "gracias") return message.reply("¡De nada!");
   },
 };

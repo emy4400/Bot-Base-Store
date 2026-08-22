@@ -76,6 +76,7 @@ function buildBotStatusEmbed(client, message) {
           `**Categoria:** ${status(tickets.categoryId)}`,
           `**Logs:** ${status(tickets.logChannelId)}`,
           `**Rol al crear ticket:** ${status(tickets.openRoleId)}`,
+          `**Rol completado:** ${status(tickets.completedRoleId)}`,
           `**Staff:** ${status(tickets.staffRoleId)}`,
         ].join("\n"),
         inline: true,

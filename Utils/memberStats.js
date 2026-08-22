@@ -113,6 +113,7 @@ async function refreshMemberStats(guild, client) {
 }
 
 function startMemberStats(client) {
+  if (!getStatsConfig(client).enabled) return;
   if (!client.guilds.cache.size) return;
 
   for (const guild of client.guilds.cache.values()) {
@@ -135,6 +136,10 @@ async function memberStatsSetupCommand(message) {
   if (!message.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) {
     return message.reply("No puedo crear contadores. Me falta el permiso `Gestionar canales`.");
   }
+
+  const config = getStatsConfig(message.client);
+  config.enabled = true;
+  saveRuntimeConfig(message.client);
 
   const stats = await refreshMemberStats(message.guild, message.client);
   const brand = getBrand(message.client);
